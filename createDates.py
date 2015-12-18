@@ -28,15 +28,19 @@ for i,month in enumerate(yearDates[0]):
 				else:
 					fileTuple = next(fileList)
 					t = next(tweetList)
-					img = imageHandler.ImageHandler(fileTuple,outputDir)
+					img = imageHandler.ImageHandler(outputDir)
 
 					print calendar.day_name[wkday]+" "+ mon + " " + str(date)
 					print "Opening: " + fileTuple[1]
 
-					resizeTup = img.resizeAndOverlayBackground(backgroundImg)
-					print "Created: " resizeTup[1]
+					img.setImage(fileTuple)
+					resizeTuple = img.resizeAndOverlayBackground(backgroundImg)
+					print "Created: " resizeTuple[1]
 
-					img.addDateAndText(resizeTup,t,date,calendar.day_name[wkday],mon)
+					#OPTIMIZE: remove ^ by just passing image along to next step
+					img.setImage(resizeTuple)
+					finalTuple = img.addDateAndText(t,date,calendar.day_abbr[wkday],mon)
+					print "Created: " finalTuple[1]
 			elif wkday == 5:
 				#saturday
 				pass

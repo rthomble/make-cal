@@ -11,21 +11,20 @@ import os
 class ImageHandler():
 		#define fonts
 
-	def __init__(self,fileNameTuple,outputLocation):
-		self.fileName = fileNameTuple[1]
-		self.fileDirectory = fileNameTuple[0]
+	def __init__(self,outputLocation):
 		self.outputDir = outputLocation
 		self.sep = os.sep
+		self.fontTweet20 = Font(path='./fonts/tyepaloon.ttf',size=20)
+		self.fontMonth60 = Font(path='./fonts/tyepaloon.ttf',size=60)
 
-	def defineFonts(self):
-		fontCaption60 = Font(path='./fonts/tyepaloon.ttf',size=20,color=white)
-		fontDate85 = Font(path='./fonts/NimbusSanNovDHea.ttf',size=85)
-		fontMonth50 = Font(path='./fonts/NimbusSanNovDHea.ttf',size=50)
-
+	def setImage(self,fileNameTuple):
+		self.fileName = fileNameTuple[1]
+		self.fileDirectory = fileNameTuple[0]
+		self.currentImageFilePath = self.fileDirectory + self.sep + self.fileName
 
 	def resizeAndOverlayBackground(self,backgroundFile):
 		#inspect image for width and height
-		with Image(filename=self.fileDirectory+self.sep+self.fileName) as img:
+		with Image(filename=self.currentImageFilePath) as img:
 			sz = img.size
 			if (sz[0] >= sz[1]):	
 				img.sample(1115,835)
@@ -37,9 +36,23 @@ class ImageHandler():
 				bg_img.composite(img,top=5,left=285)
 
 				bg_img.save(filename=self.outputDir+self.sep+'rsBG'+self.fileName)
-			self.resizeBackFileTuple = (self.outputDir,'rsBG'+self.fileName)
-			return self.resizeBackFileTuple
+			return (self.outputDir,'rsBG'+self.fileName)
 
-	def addCaption(self,caption):
-		pass
+	def addDateAndText(self,tweet,day,weekday,month):
+		#MUST CALL setImage fist
+		with Image(filename=self.currentImageFilePath) as img:
+			#create day of week
+			img.caption(weekday,left=90,top=65,width=108,height=56,font=font,gravity='north_west')
+
+			#create date of month
+			img.caption('%02d' % (day),left=116,top=116,width=72,height=56,font=font,gravity='north_west')
+
+			#create month 
+			img.caption(month,left=90,top=172,width=108,height=56,font=font,gravity='north_west')
+
+			#create tweet 
+			img.caption(t,left=25,top=350,width=260,height=500,font=font20,gravity='north_west')
 		
+			img.save(filename=self.outputDir+self.sep+ weekday + mon + day + "page.jpg")	
+		return (self.outputDir, weekday + mon + day + "page.jpg")	
+			
