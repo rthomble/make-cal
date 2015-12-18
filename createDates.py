@@ -16,7 +16,7 @@ vertFiles = fileNameHandler.FileNameHandler("/Users/rthomble/Documents/Programmi
 fileList = vertFiles.returnRandomFile()
 
 for i,month in enumerate(yearDates[0]):
-	mon = calendar.month_name[i+1]
+	mon = calendar.month_abbr[i+1]
 	for week in month:
 		for (date,wkday) in week:
 			if (date > 9):
@@ -27,11 +27,16 @@ for i,month in enumerate(yearDates[0]):
 					pass
 				else:
 					fileTuple = next(fileList)
+					t = next(tweetList)
 					img = imageHandler.ImageHandler(fileTuple,outputDir)
-					print img.resizeAndOverlayBackground(backgroundImg)
+
 					print calendar.day_name[wkday]+" "+ mon + " " + str(date)
-					print next(tweetList)
-					print fileTuple[1]
+					print "Opening: " + fileTuple[1]
+
+					resizeTup = img.resizeAndOverlayBackground(backgroundImg)
+					print "Created: " resizeTup[1]
+
+					img.addDateAndText(resizeTup,t,date,calendar.day_name[wkday],mon)
 			elif wkday == 5:
 				#saturday
 				pass

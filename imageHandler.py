@@ -37,4 +37,9 @@ class ImageHandler():
 				bg_img.composite(img,top=5,left=285)
 
 				bg_img.save(filename=self.outputDir+self.sep+'rsBG'+self.fileName)
-		return self.outputDir+self.sep+'rsBG'+self.fileName
+			self.resizeBackFileTuple = (self.outputDir,'rsBG'+self.fileName)
+			return self.resizeBackFileTuple
+
+	def addCaption(self,caption):
+		pass
+		
