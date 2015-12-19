@@ -35,12 +35,12 @@ for i,month in enumerate(yearDates[0]):
 
 					img.setImage(fileTuple)
 					resizeTuple = img.resizeAndOverlayBackground(backgroundImg)
-					print "Created: " resizeTuple[1]
+					print "Created: "+ resizeTuple[1]
 
 					#OPTIMIZE: remove ^ by just passing image along to next step
 					img.setImage(resizeTuple)
 					finalTuple = img.addDateAndText(t,date,calendar.day_abbr[wkday],mon)
-					print "Created: " finalTuple[1]
+					print "Created: "+ finalTuple[1]
 			elif wkday == 5:
 				#saturday
 				pass

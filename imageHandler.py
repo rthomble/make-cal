@@ -14,8 +14,8 @@ class ImageHandler():
 	def __init__(self,outputLocation):
 		self.outputDir = outputLocation
 		self.sep = os.sep
-		self.fontTweet20 = Font(path='./fonts/tyepaloon.ttf',size=20)
-		self.fontMonth60 = Font(path='./fonts/tyepaloon.ttf',size=60)
+		self.font24 = Font(path='./fonts/tyepaloon.ttf',size=24)
+		self.font60 = Font(path='./fonts/tyepaloon.ttf',size=60)
 
 	def setImage(self,fileNameTuple):
 		self.fileName = fileNameTuple[1]
@@ -40,19 +40,20 @@ class ImageHandler():
 
 	def addDateAndText(self,tweet,day,weekday,month):
 		#MUST CALL setImage fist
+		dayStr = '%02d' % (day)
 		with Image(filename=self.currentImageFilePath) as img:
 			#create day of week
-			img.caption(weekday,left=90,top=65,width=108,height=56,font=font,gravity='north_west')
+			img.caption(weekday,left=90,top=65,width=108,height=56,font=self.font60,gravity='north_west')
 
 			#create date of month
-			img.caption('%02d' % (day),left=116,top=116,width=72,height=56,font=font,gravity='north_west')
+			img.caption(dayStr,left=116,top=116,width=72,height=56,font=self.font60,gravity='north_west')
 
 			#create month 
-			img.caption(month,left=90,top=172,width=108,height=56,font=font,gravity='north_west')
+			img.caption(month,left=90,top=172,width=108,height=56,font=self.font60,gravity='north_west')
 
 			#create tweet 
-			img.caption(t,left=25,top=350,width=260,height=500,font=font20,gravity='north_west')
+			img.caption(tweet,left=23,top=475,width=232,height=500,font=self.font24,gravity='north_west')
 		
-			img.save(filename=self.outputDir+self.sep+ weekday + mon + day + "page.jpg")	
-		return (self.outputDir, weekday + mon + day + "page.jpg")	
+			img.save(filename=self.outputDir + self.sep +  month + dayStr + weekday + "page.jpg")	
+		return (self.outputDir, month + dayStr + weekday + "page.jpg")	
 			
