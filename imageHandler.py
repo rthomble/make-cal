@@ -9,13 +9,17 @@ import os
 
 
 class ImageHandler():
-		#define fonts
+	#width,height
+	typeSize = {'square':(1115,1115),'horiz':(1115,835),'vert':(835,1115)}
 
-	def __init__(self,outputLocation):
+	def __init__(self,outputLocation,pageType):
 		self.outputDir = outputLocation
 		self.sep = os.sep
 		self.font24 = Font(path='./fonts/tyepaloon.ttf',size=24)
 		self.font60 = Font(path='./fonts/tyepaloon.ttf',size=60)
+		#valid types "vert",'horiz','square'
+		self.pageType = pageType
+		self.typeSizing = ImageHandler.typeSize[pageType]
 
 	def setImage(self,fileNameTuple):
 		self.fileName = fileNameTuple[1]
@@ -23,20 +27,33 @@ class ImageHandler():
 		self.currentImageFilePath = self.fileDirectory + self.sep + self.fileName
 
 	def resizeAndOverlayBackground(self,backgroundFile):
-		#inspect image for width and height
+		refSize = self.typeSizing
 		with Image(filename=self.currentImageFilePath) as img:
-			sz = img.size
-			if (sz[0] >= sz[1]):	
-				img.sample(1115,835)
-			else:
-				img.sample(835,1115)
-			if img.width > img.height:
-				img.rotate(90)
 			with Image(filename=backgroundFile) as bg_img:
-				bg_img.composite(img,top=5,left=285)
+				#inspect image for width and height
+				if self.pageType == 'vert':
+					img.resize(width=835,height=1115)
+					if img.width > img.height:
+						img.rotate(90)
+					bg_img.composite(img,top=5,left=285)
 
+				elif self.pageType == 'horiz':
+					img.resize(width=1115,height=835)
+					if img.width < img.height:
+						img.rotate(90)
+					bg_img.composite(img,top=5,left=5)
+
+				elif self.pageType == 'square':
+					img.resize(refSize[0],refSize[1])
+					with Color('#00000080') as grey:
+						with Drawing() as draw:
+							draw.fill_color = grey
+							draw.rectangle(left=23,top=857,right=258,bottom=1092)
+							draw(img)
+					bg_img.composite(img,top=5,left=5)
+				else:
+					return None
 				bg_img.save(filename=self.outputDir+self.sep+'rsBG'+self.fileName)
-			return (self.outputDir,'rsBG'+self.fileName)
 
 	def addDateAndText(self,tweet,day,weekday,month):
 		#MUST CALL setImage fist
