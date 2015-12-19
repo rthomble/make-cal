@@ -16,8 +16,7 @@ class ImageHandler():
 			#img.caption(tweet,left=23,top=475,width=232,height=500,font=self.font24,gravity='north_west')
 	captionGeo = {'vert':(23,461,232,500),'horiz':(555,970,520,90)}
 
-	def __init__(self,outputLocation,pageType):
-		self.outputDir = outputLocation
+	def __init__(self,pageType):
 		self.sep = os.sep
 		self.font24 = Font(path='./fonts/tyepaloon.ttf',size=24)
 		if (pageType == 'square'):
@@ -29,7 +28,8 @@ class ImageHandler():
 		self.pageType = pageType
 		self.typeSizing = ImageHandler.typeSize[pageType]
 
-	def setImage(self,fileNameTuple):
+	def setImage(self,fileNameTuple,outputLocation):
+		self.outputDir = outputLocation
 		self.fileName = fileNameTuple[1]
 		self.fileDirectory = fileNameTuple[0]
 		self.currentImageFilePath = self.fileDirectory + self.sep + self.fileName
@@ -62,6 +62,7 @@ class ImageHandler():
 				else:
 					return None
 				bg_img.save(filename=self.outputDir+self.sep+'rsBG'+self.fileName)
+			return (self.outputDir,self.sep+'rsBG'+self.fileName)
 
 	def addDateAndText(self,tweet,day,weekday,month):
 		#MUST CALL setImage fist
